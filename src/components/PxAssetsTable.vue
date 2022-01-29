@@ -20,9 +20,11 @@
         <td></td>
         <td># {{asset.rank}}</td>
         <td>{{asset.name}}</td>
-        <td>{{asset.priceUsd}}</td>
-        <td>{{asset.marketCapUsd}}</td>
-        <td>{{asset.changePercent24Hr}}</td>
+        <td>{{asset.priceUsd | dollar}}</td>
+        <td>{{asset.marketCapUsd | dollar}}</td>
+        <td 
+        :class="asset.changePercent24Hr.includes('-')? 'text-red-600' : 'text-green-600'">
+        {{asset.changePercent24Hr | percent}}</td>
         <td class="hidden sm:block"></td>
       </tr>
     </tbody>
