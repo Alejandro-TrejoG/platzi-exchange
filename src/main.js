@@ -5,6 +5,12 @@ import router from "@/router"
 import {dollarFilter} from "@/filters"
 import {precentFilter} from "@/filters"
 
+import Chartkick from "vue-chartkick"
+import Chart from "chart.js"
+import {VueSpinners} from "@saeris/vue-spinners"
+
+Vue.use(Chartkick.use(Chart))
+Vue.use(VueSpinners)
 Vue.filter("dollar", dollarFilter)
 Vue.filter("percent", precentFilter)
 Vue.config.productionTip = false;
