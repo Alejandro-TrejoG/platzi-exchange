@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col">
     <div class="flex justify-center">
-      <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100"/>
+      <pacman-loader :loading="isLoading" :color="'#d9ff00'" :size="50"/>
     </div>
     <template v-if="!isLoading">
       <div class="flex flex-col sm:flex-row justify-around items-center">
@@ -50,12 +50,14 @@
 
         <div class="my-10 sm:mt-0 flex flex-col justify-center text-center">
           <button
+          @click="toggleConverter"
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          >Cambiar</button>
+          >{{this.fromUsd ? `Dolar a ${asset.symbol}` : ` ${asset.symbol} a Dolar`}}</button>
 
           <div class="flex flex-row my-5">
             <label class="w-full" for="convertValue">
               <input
+              v-model="convertedValue"
                 id="convertValue"
                 type="number"
                 class="text-center bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-lg py-2 px-4 block w-full appearance-none leading-normal"
@@ -63,7 +65,7 @@
             </label>
           </div>
 
-          <span class="text-xl"></span>
+          <span class="text-xl">{{convertResult}} {{this.fromUsd ? `${asset.symbol}` : `USD`}}</span>
         </div>
       </div>
 
@@ -116,11 +118,24 @@ export default {
             isLoading: false,
             asset: {},
             history: [],
-            markets: []
+            markets: [],
+            fromUsd: true,
+            convertedValue: null
             }
     },
 
     computed: {
+
+        convertResult (){
+          if (!this.convertedValue) {
+            return 0
+          }
+
+          const result = this.fromUsd ? this.convertedValue / this.asset.priceUsd : this.convertedValue * this.asset.priceUsd
+
+          return result.toFixed(4)
+        },
+
         min() {
             return Math.min(
                 ... this.history.map(h => parseFloat(h.priceUsd).toFixed(2))
@@ -136,11 +151,22 @@ export default {
         }
     },
 
+    watch:{
+      $route(){
+        this.getCoin()
+      }
+    },
+
     created() {
         this.getCoin()
     },
 
     methods: {
+
+        toggleConverter(){
+          this.fromUsd = !this.fromUsd
+        },
+
         getWebSite(exchange){
 
           this.$set(exchange, "isLoading", true)
@@ -168,3 +194,10 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+  td{
+    padding: 10px;
+    text-align: center;
+  }
+</style>

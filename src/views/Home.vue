@@ -1,6 +1,6 @@
 <template>
     <div>
-        <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100"/>
+        <pacman-loader :loading="isLoading" :color="'#d9ff00'" :size="50"/>
         <px-assets-table v-if="!isLoading" :assets="assets"/>
     </div>
 </template>
